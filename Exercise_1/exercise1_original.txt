@@ -1,0 +1,4 @@
+public class Oddity { // Altough it is possible to create classes without main method, for the program to be "runable" we need to add a Main method
+    public static boolean isOdd(int i) { return i % 2 == 1; //As a good practice we should use identation
+    }
+}

@@ -1,0 +1,564 @@
+swagger: '2.0'
+info:
+  title: TDA QA Recruitment Test API
+  version: '1.0.0'
+schemes:
+  - https
+host: '4s9rh46bpe.execute-api.eu-central-1.amazonaws.com'
+basePath: '/test'
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  device-os:
+    name: device-os
+    in: header
+    required: true
+    type: string
+    enum:
+      - android
+      - ios
+    description: OS of the device making the request
+  app-locale:
+    name: app-locale
+    in: header
+    required: true
+    type: string
+    description: Define locale for language
+    enum:
+      - de_DE
+      - en_GB
+  x-api-key:
+    name: x-api-key
+    in: header
+    required: true
+    type: string
+    description: TDA QA Recruitment Test x-api-key '0qNSzqieHI5M36LLgY7Y85Zco0SMXKyr37MIOSAG' (or '1b34X9pNjg5lMvRAXLNTS85TQgrzoYLEa3LUQ6Wh' if the previous one fails)
+  login-token:
+    name: login-token
+    in: header
+    required: true
+    type: string
+    description: Authentication token to use in interactions with the API
+  correlation-id:
+    name: correlation-id
+    in: header
+    required: false
+    type: string
+    description: A string to allow tracking, if passed the endpoint should return it as well with the same value
+  id:
+    name: id
+    in: path
+    required: true
+    type: string
+    description: Id of the booking
+  bookingRef:
+    name: bookingRef
+    in: query
+    required: true
+    type: string
+    description: Reference of the booking
+  surname:
+    name: surname
+    in: query
+    required: true
+    type: string
+    description: Surname of the individual who made the booking
+  loginBody:
+    name: loginBody
+    description: User to login  with
+    in: body
+    required: true
+    schema:
+      $ref: "#/definitions/LoginBody"
+paths:
+  /healthcheck:
+    get:
+      tags:
+        - Healthcheck
+      summary: API info
+      description: Get info about the API and current market
+      operationId: healthcheck
+      parameters:
+        - $ref: "#/parameters/app-locale"
+        - $ref: "#/parameters/x-api-key"
+        - $ref: "#/parameters/correlation-id"
+      responses:
+        '200':
+          $ref: "#/definitions/Healthcheck"
+        default:
+          $ref: "#/definitions/DefaultError"
+      deprecated: false
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login DE
+      description: Login user with username and password
+      operationId: auth.userloginPost
+      parameters:
+        - $ref: "#/parameters/device-os"
+        - $ref: "#/parameters/app-locale"
+        - $ref: "#/parameters/x-api-key"
+        - $ref: "#/parameters/loginBody"
+        - $ref: "#/parameters/correlation-id"
+      responses:
+        '200':
+          $ref: "#/definitions/Login"
+        default:
+          $ref: "#/definitions/DefaultError"
+      deprecated: false
+    get:
+      tags:
+        - Auth
+      summary: Login UK
+      description: Login user with username and password
+      operationId: auth.userloginGet
+      parameters:
+        - $ref: "#/parameters/device-os"
+        - $ref: "#/parameters/app-locale"
+        - $ref: "#/parameters/x-api-key"
+        - $ref: "#/parameters/bookingRef"
+        - $ref: "#/parameters/surname"
+        - $ref: "#/parameters/correlation-id"
+      responses:
+        '200':
+          $ref: "#/definitions/Login"
+        default:
+          $ref: "#/definitions/DefaultError"
+      deprecated: false
+  /v1/bookings:
+    get:
+      tags:
+        - Booking
+      summary: Available bookings
+      description: List of available bookings
+      operationId: v1.bookings
+      parameters:
+        - $ref: "#/parameters/device-os"
+        - $ref: "#/parameters/app-locale"
+        - $ref: "#/parameters/x-api-key"
+        - $ref: "#/parameters/login-token"
+        - $ref: "#/parameters/correlation-id"
+      responses:
+        '200':
+          $ref: "#/definitions/Bookings"
+        default:
+          $ref: "#/definitions/DefaultError"
+      deprecated: false
+  '/v1/bookings/{id}':
+    get:
+      tags:
+        - Booking
+      summary: Booking Info
+      description: Info about a specific booking depending on ID
+      operationId: v1.bookingsById
+      parameters:
+        - $ref: "#/parameters/device-os"
+        - $ref: "#/parameters/app-locale"
+        - $ref: "#/parameters/x-api-key"
+        - $ref: "#/parameters/login-token"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/correlation-id"
+      responses:
+        '200':
+          $ref: "#/definitions/Booking"
+        default:
+          $ref: "#/definitions/DefaultError"
+      deprecated: false
+  '/v1/bookings/{id}/weather':
+    get:
+      tags:
+        - Booking
+      summary: Weather
+      description: Weather in destination depending on bookingRef
+      operationId: v1.weather
+      parameters:
+        - $ref: "#/parameters/device-os"
+        - $ref: "#/parameters/app-locale"
+        - $ref: "#/parameters/x-api-key"
+        - $ref: "#/parameters/login-token"
+        - $ref: "#/parameters/id"
+        - $ref: "#/parameters/correlation-id"
+      responses:
+        '200':
+          $ref: "#/definitions/Weather"
+        default:
+          $ref: "#/definitions/DefaultError"
+      deprecated: false
+definitions:
+  Healthcheck:
+      type: object
+      required:
+        - apiVersion
+        - market
+        - status
+      properties:
+        apiVersion:
+          type: string
+          description: Current version of the API
+          example: "1.0.0"
+        market:
+          type: string
+          enum:
+            - DE
+            - UK
+          description: Market that the API is called for (depends on app-locale)
+        status:
+          type: object
+          required:
+            - health
+            - uptime
+          properties:
+            health:
+              type: string
+              enum:
+                - HEALTHY
+                - UNSTABLE
+                - DOWN
+              description: Enum status of API Health
+            uptime:
+              type: integer
+              description: Time the API was up for in millis
+              example: 9150334723
+          description: Current status of the API Health
+      description: Get info about the API and current market
+  Login:
+    description: Login
+    type: object
+  LoginBody:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        description: Username to login with
+        example: test
+      password:
+        type: string
+        description: Password to login with
+        example: test
+    description: Body to be sent for Login
+  Bookings:
+    type: object
+    required:
+      - bookings
+    properties:
+      bookings:
+        type: array
+        items:
+          type: object
+          required:
+            - bookingRef
+            - startDate
+            - endDate
+            - country
+          properties:
+            bookingRef:
+              type: string
+              description: Reference to the booking
+              example: AR58930
+            startDate:
+              type: string
+              description: ISO representation of holiday start in UTC
+              example: "2019-05-12"
+            endDate:
+              type: string
+              description: ISO representation of holiday end in UTC
+              example: "2019-05-27"
+            country:
+              type: string
+              description: Country the bookins is for
+              example: "Spain"
+            lead:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Sam"
+                  description: Name of the lead
+                surname:
+                  type: string
+                  example: "Smith"
+                  description: Surname of the lead
+              description: Info about the lead of the holidays
+          description: Booking overview
+        description: List of all available bookings to the user
+    description: Bookings object containing all available bookings for the user
+  Booking:
+    description: Detailed booking object
+    type: object
+    required:
+      - bookingRef
+      - startDate
+      - endDate
+    properties:
+      bookingRef:
+        type: string
+        description: Unique identifier for a specific booking
+        example: AR58930
+      status:
+        type: string
+        enum:
+          - PRE
+          - ON
+          - POST
+        description: Booking status
+      startDate:
+        type: string
+        description: ISO representation of holiday start in UTC
+        example: "2019-05-12"
+      endDate:
+        type: string
+        description: ISO representation of holiday end in UTC
+        example: "2019-05-27"
+      flights:
+        type: array
+        items:
+          type: object
+          required:
+            - departureDatetime
+            - departureAirport
+            - arrivalDatetime
+            - arrivalAirport
+            - type
+          properties:
+            flightOperator:
+              type: string
+              description: Operator of the flight
+              example: "TUI"
+            departureDatetime:
+              type: string
+              description: ISO representation of flight departure in UTC
+              example: "2019-05-12T12:10:00+00:00"
+            departureAirport:
+              type: string
+              description: IATA Airport code
+              example: "LTN"
+            arrivalDatetime:
+              type: string
+              description: ISO representation of return flight arrival in UTC
+              example: "2019-05-12T12:40:00+01:00"
+            arrivalAirport:
+              type: string
+              description: IATA Airport code
+              example: "PMI"
+            type:
+              type: string
+              enum:
+                - INBOUND
+                - INTERMEDIATE
+                - OUTBOUND
+              description: Type of flight
+          description: Detailed flight info
+        description: List of all flights
+      accomodation:
+        type: array
+        items:
+          type: object
+          required:
+            - id
+            - name
+            - country
+            - startDate
+            - endDate
+          properties:
+            id:
+              type: string
+              description: ID of the accommodation
+              example: AC45934
+            name:
+              type: string
+              description: Name of the accomodation
+              example: Hotel de la palma
+            country:
+              type: string
+              description: Country in which the accommodation is present
+              example: Mallorca
+            startDate:
+              type: string
+              description: ISO representation of accommodation booking start in UTC
+              example: "2019-05-13"
+            endDate:
+              type: string
+              description: ISO representation of accommodation booking end in UTC
+              example: "2019-05-27"
+            rooms:
+              type: array
+              items:
+                type: object
+                required:
+                  - roomType
+                  - guests
+                properties:
+                  roomType:
+                    type: string
+                    enum:
+                      - ECO_LIGHT
+                      - ECO
+                      - STANDARD
+                      - DELUX
+                    description: Room type
+                  guests:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - fullName
+                        - firstName
+                        - lastName
+                        - lead
+                      properties:
+                        fullName:
+                          type: string
+                          description: Full name of the guest
+                          example: Bob The-Builder
+                        firstName:
+                          type: string
+                          description: Guest's first name
+                          example: Bob
+                        lastName:
+                          type: string
+                          description: Guest's last name
+                          example: The-Builder
+                        lead:
+                          type: boolean
+                          description: Boolean to specify the leader (One must be true)
+                      description: Detailed info about the guest
+                    description: List of guests
+                  roomNumbers:
+                    type: array
+                    items:
+                      type: string
+                      example: "6B"
+                description: Detailed info about the room
+              description: List of rooms
+          description: Detailed accommodation info
+        description: List of accomodation in the booking
+  Weather:
+    type: object
+    required:
+      - weather
+    properties:
+      weather:
+        type: array
+        items:
+          type: object
+          required:
+            - startDate
+            - endDate
+            - weatherStations
+          properties:
+            startDate:
+              type: string
+              description: ISO representation of holiday start in UTC
+              example: "2019-05-12"
+            endDate:
+              type: string
+              description: ISO representation of holiday end in UTC
+              example: "2019-05-27"
+            weatherStations:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - city
+                  - country
+                  - temperatureUnit
+                  - speedUnit
+                  - weatherData
+                properties:
+                  id:
+                    type: string
+                    description: ID of the weather station
+                    example: WS64353
+                  city:
+                    type: string
+                    description: City location of weather station
+                    example: Palma
+                  country:
+                    type: string
+                    description: Country location of weather station
+                    example: Spain
+                  temperatureUnit:
+                    type: string
+                    enum:
+                      - CELCIUS
+                      - FARENHEIT
+                    description: Unit of temeperature returned
+                  speedUnit:
+                    type: string
+                    enum:
+                      - KPH
+                      - MPH
+                    description: Unit of speed returned
+                  weatherData:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                       - date
+                       - temperatureMin
+                       - temperatureMax
+                       - windDirection
+                       - windSpeed
+                       - chanceOfRain
+                       - icon
+                      properties:
+                        date:
+                          type: string
+                          description: IOS date of the weather forcast
+                          example: "2019-05-12"
+                        temperatureMin:
+                          type: string
+                          description: Minimum forcast temperature
+                          example: "15"
+                        temperatureMax:
+                          type: string
+                          description: Maximum forcast temperature
+                          example: "29"
+                        temperatureWater:
+                          type: string
+                          description: Water forcast temperature
+                          example: "19"
+                        windDirection:
+                          type: string
+                          description: Direction of the wind
+                          example: "SW"
+                        windSpeed:
+                          type: integer
+                          description: The speed of the wind
+                          example: 10
+                        chanceOfRain:
+                          type: integer
+                          description: Percentage chance of rain
+                          example: 5
+                        icon:
+                          type: string
+                          description: URL of the image to be used
+                          example: "http"
+                      description: Weather data for the day
+                    description: List of weather data for each day
+                description: Weather startion data
+              description: List of all Weather stations with weather info
+          description: Weather Object
+        description: List of weather objects
+    description: Object containing ifo about all weather for each location
+  DefaultError:
+    description: Unexpected error
+    type: object
+    properties:
+      error:
+        type: object
+        properties:
+          code:
+            type: integer
+            format: int32
+            example: 500
+          message:
+            type: string
+            example: Internal Server Error

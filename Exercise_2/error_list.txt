@@ -1,0 +1,7 @@
+List of errors:
+
+ - "Class" must be spelled with lowercase "class"
+ - "init" must be "__init__" as it has a special meaning for the interpreter
+ - As a good formatting practice there should be a space between dictionary key and its value, so "self._my_dict = {"a":123, "b": True}" would become "self._my_dict = {"a": 123, "b": True}"
+ - "_my_dict" should only have the leading underscore if it's meant to be for internal use only (by convention)
+
