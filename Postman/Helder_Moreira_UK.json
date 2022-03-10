@@ -1,0 +1,34 @@
+{
+	"id": "b79762de-d629-45a9-a31e-3fa959d87571",
+	"name": "Helder_Moreira_UK",
+	"values": [
+		{
+			"key": "app-locale",
+			"value": "en_GB",
+			"enabled": true
+		},
+		{
+			"key": "username",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "booking_id",
+			"value": "AR58930",
+			"enabled": true
+		},
+		{
+			"key": "device-os",
+			"value": "android",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2022-03-09T20:33:39.115Z",
+	"_postman_exported_using": "Postman/8.12.1"
+}

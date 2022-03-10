@@ -1,0 +1,29 @@
+{
+	"id": "e3997f48-8edd-4f63-b6d5-37fedbde5926",
+	"name": "Helder_Moreira_DE",
+	"values": [
+		{
+			"key": "app-locale",
+			"value": "de_DE",
+			"enabled": true
+		},
+		{
+			"key": "username",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "booking_id",
+			"value": "ADE9452",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2022-03-09T20:33:52.134Z",
+	"_postman_exported_using": "Postman/8.12.1"
+}
