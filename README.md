@@ -10,3 +10,5 @@
     * error_list.txt - List of the problems found in the code
   * **Exercise 3** - exercise3.py - Pyhton code with the solution for the exercise 3
   * **Exercise 4** - exercise4.py - Pyhton code with the solution for the exercise 4
+  * **Postman** - All answers regarding Postman test
+
