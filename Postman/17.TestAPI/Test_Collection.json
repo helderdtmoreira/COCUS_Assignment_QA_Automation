@@ -1552,6 +1552,16 @@
 					"pm.test(\"Correlation-id header is present and as the correct value\", () => {",
 					"  pm.response.to.have.header(\"correlation-id\");",
 					"  pm.expect(pm.response.headers.get('correlation-id')).to.eql(pm.variables.get('correlation-id'));",
+					"});",
+					"",
+					"pm.test(\"Content-Type header is present and as the correct value\", () => {",
+					"  pm.response.to.have.header(\"Content-Type\");",
+					"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json');",
+					"});",
+					"",
+					"pm.test(\"Connection header is present and as the correct value\", () => {",
+					"  pm.response.to.have.header(\"Connection\");",
+					"  pm.expect(pm.response.headers.get('Connection')).to.eql('keep-alive');",
 					"});"
 				]
 			}
