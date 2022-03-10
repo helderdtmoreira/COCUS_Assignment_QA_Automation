@@ -11,4 +11,8 @@
   * **Exercise 3** - exercise3.py - Pyhton code with the solution for the exercise 3
   * **Exercise 4** - exercise4.py - Pyhton code with the solution for the exercise 4
   * **Postman** - All answers regarding Postman test
+    * 17.TestAPI - Files relative to question 17 from "COCUS Challenge - Postman_Filled.pdf"
+    * COCUS Challenge - Postman_Filled.pdf - Provided Postman test edited with answer to some ( :'( ) questions
+    * COCUS Challenge - Swagger.yaml - Swagger file provided
+    * *.json - Extra files that contain answers to some of the Postman test questions
 
